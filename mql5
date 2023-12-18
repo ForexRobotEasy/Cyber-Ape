@@ -1,0 +1,100 @@
+mql5
+//+------------------------------------------------------------------+
+//|                                         Cyber Ape.mq5           |
+//|                        Developed by Forex Robot Easy Team        |
+//|                                       forexroboteasy.com         |
+//+------------------------------------------------------------------+
+
+// Include necessary libraries
+#include <Trade\PositionInfo.mqh>
+#include <Trade\Trade.mqh>
+#include <Trade\SymbolInfo.mqh>
+
+// Define global variables
+input int entrySignal = 1; // Default entry signal
+input int exitSignal = 1;  // Default exit signal
+input int numStrategies = 1; // Number of strategies
+input ENUM_TRADE_ACTION tradeAction = TRADE_ACTION_NONE; // Default trade action
+input ENUM_ORDER_TYPE orderType = ORDER_TYPE_BUY; // Default order type
+input int numActivePositions = 1; // Number of active positions
+
+//+------------------------------------------------------------------+
+//| Expert initialization function                                   |
+//+------------------------------------------------------------------+
+int OnInit()
+{
+   // Set up necessary parameters
+   SymbolInfo.SetSymbol(Symbol()); // Set current symbol
+   Trade.SetExpertMagicNumber(GetTickCount()); // Set unique magic number
+   
+   // Initialize trading functions
+   if(!Trade.Open())
+   {
+      Print('Failed to initialize trading functions!');
+      return INIT_FAILED;
+   }
+   
+   return INIT_SUCCEEDED;
+}
+
+//+------------------------------------------------------------------+
+//| Expert deinitialization function                                 |
+//+------------------------------------------------------------------+
+void OnDeinit(const int reason)
+{
+   Trade.CloseAllPositions(); // Close all open positions
+}
+
+//+------------------------------------------------------------------+
+//| Expert tick function                                             |
+//+------------------------------------------------------------------+
+void OnTick()
+{
+   // Check if there are active positions
+   if(PositionInfo.Total() < numActivePositions)
+   {
+      // Check entry signals
+      if(entrySignal == 1)
+      {
+         // Implement strategy 1
+         // Place order based on trade action and order type
+         if(tradeAction != TRADE_ACTION_NONE && orderType != ORDER_TYPE_NONE)
+         {
+            Trade.PlaceOrder(orderType, tradeAction, 0.01, 0, 0, 0, NULL, NULL);
+         }
+      }
+      else if(entrySignal == 2)
+      {
+         // Implement strategy 2
+         // Place order based on trade action and order type
+         if(tradeAction != TRADE_ACTION_NONE && orderType != ORDER_TYPE_NONE)
+         {
+            Trade.PlaceOrder(orderType, tradeAction, 0.01, 0, 0, 0, NULL, NULL);
+         }
+      }
+      // Implement other entry signals
+      // ...
+   }
+   
+   // Check exit signals
+   if(exitSignal == 1)
+   {
+      // Implement exit strategy 1
+      // Close positions based on trade action and order type
+      if(tradeAction != TRADE_ACTION_NONE && orderType != ORDER_TYPE_NONE)
+      {
+         Trade.CloseAllPositions(tradeAction, orderType);
+      }
+   }
+   else if(exitSignal == 2)
+   {
+      // Implement exit strategy 2
+      // Close positions based on trade action and order type
+      if(tradeAction != TRADE_ACTION_NONE && orderType != ORDER_TYPE_NONE)
+      {
+         Trade.CloseAllPositions(tradeAction, orderType);
+      }
+   }
+   // Implement other exit signals
+   // ...
+}
